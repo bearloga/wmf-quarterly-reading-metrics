@@ -34,7 +34,6 @@ results <- pageviews %>%
     `Referred by something other than search engine` = "external",
     `Referred by a search engine` = "external (search engine)",
     `Referred internally (itself or a sister wiki)` = "internal",
-    `Referred internally, non-search-engine, and unknown` = "internal+external+unknown",
     `Direct (not referred by anything)` = "none"
   )) %>%
   dplyr::group_by(date, referrer = referer_class) %>%

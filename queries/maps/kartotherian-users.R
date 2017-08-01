@@ -19,20 +19,20 @@ if (!dir.exists(dirname(tsv_path))) {
 }
 
 query <- "WITH per_user_counts AS (
-    SELECT
-        client_ip, user_agent,
-        COUNT(1) AS tiles
-    FROM wmf.webrequest
-    WHERE
-        webrequest_source = 'upload'
-        AND year = ${year} AND month = ${month} AND day = ${day}
-        AND uri_host = 'maps.wikimedia.org'
-        AND http_status IN('200', '304')
-        AND uri_path RLIKE '^/([^/]+)/([0-9]{1,2})/(-?[0-9]+)/(-?[0-9]+)(@([0-9]\\.?[0-9]?)x)?\\.([a-z]+)$'
-        AND uri_query <> '?loadtesting'
-        AND REGEXP_EXTRACT(uri_path, '^/([^/]+)/([0-9]{1,2})/(-?[0-9]+)/(-?[0-9]+)(@([0-9]\\.?[0-9]?)x)?\\.([a-z]+)$', 1) != '' -- style
-        AND REGEXP_EXTRACT(uri_path, '^/([^/]+)/([0-9]{1,2})/(-?[0-9]+)/(-?[0-9]+)(@([0-9]\\.?[0-9]?)x)?\\.([a-z]+)$', 2) != '' -- zoom
-    GROUP BY client_ip, user_agent
+  SELECT
+    client_ip, user_agent,
+    COUNT(1) AS tiles
+  FROM wmf.webrequest
+  WHERE
+    webrequest_source = 'upload'
+    AND year = ${year} AND month = ${month} AND day = ${day}
+    AND uri_host = 'maps.wikimedia.org'
+    AND http_status IN('200', '304')
+    AND uri_path RLIKE '^/([^/]+)/([0-9]{1,2})/(-?[0-9]+)/(-?[0-9]+)(@([0-9]\\.?[0-9]?)x)?\\.([a-z]+)$'
+    AND uri_query <> '?loadtesting'
+    AND REGEXP_EXTRACT(uri_path, '^/([^/]+)/([0-9]{1,2})/(-?[0-9]+)/(-?[0-9]+)(@([0-9]\\.?[0-9]?)x)?\\.([a-z]+)$', 1) != '' -- style
+    AND REGEXP_EXTRACT(uri_path, '^/([^/]+)/([0-9]{1,2})/(-?[0-9]+)/(-?[0-9]+)(@([0-9]\\.?[0-9]?)x)?\\.([a-z]+)$', 2) != '' -- zoom
+  GROUP BY client_ip, user_agent
 )
 SELECT
   COUNT(1) AS unique_users,

@@ -4,7 +4,7 @@ Phabricator: [T171528](https://phabricator.wikimedia.org/T171528)
 
 ```bash
 TODAY=`date +%F`
-nice ionice ./main.sh >> ${TODAY}.log 2>&1
+nice ionice ./main.sh ${TODAY} >> ${TODAY}.log 2>&1
 ```
 
 Output:

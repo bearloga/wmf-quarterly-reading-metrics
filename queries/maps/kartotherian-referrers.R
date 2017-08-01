@@ -18,34 +18,34 @@ if (!dir.exists(dirname(tsv_path))) {
 }
 
 query <- "SELECT
-    CASE WHEN parse_url(referer, 'HOST') = 'tools.wmflabs.org' THEN 'Wikimedia Labs'
-         WHEN parse_url(referer, 'HOST') = 'query.wikidata.org' THEN 'Wikidata Query Service'
-         WHEN parse_url(referer, 'HOST') RLIKE '(pkget)|(pkmtracker)|(pogomap)' THEN 'Pokemon Go fansite'
-         WHEN referer IS NULL THEN 'Wikimedia Maps'
-         WHEN referer_class = 'internal' & parse_url(referer, 'HOST') RLIKE 'wikipedia\\.org$' THEN 'Wikipedia'
-         WHEN referer_class = 'internal' & parse_url(referer, 'HOST') RLIKE 'wikivoyage\\.org$' THEN 'Wikivoyage'
-         WHEN referer_class = 'internal' THEN 'Other Wikimedia projects'
-         ELSE 'Other' END AS referrer,
-    COUNT(1) AS tiles
+  CASE WHEN parse_url(referer, 'HOST') = 'tools.wmflabs.org' THEN 'Wikimedia Labs'
+       WHEN parse_url(referer, 'HOST') = 'query.wikidata.org' THEN 'Wikidata Query Service'
+       WHEN parse_url(referer, 'HOST') RLIKE '(pkget)|(pkmtracker)|(pogomap)' THEN 'Pokemon Go fansite'
+       WHEN referer IS NULL THEN 'Wikimedia Maps'
+       WHEN referer_class = 'internal' AND parse_url(referer, 'HOST') RLIKE 'wikipedia\\.org$' THEN 'Wikipedia'
+       WHEN referer_class = 'internal' AND parse_url(referer, 'HOST') RLIKE 'wikivoyage\\.org$' THEN 'Wikivoyage'
+       WHEN referer_class = 'internal' THEN 'Other Wikimedia projects'
+       ELSE 'Other' END AS referrer,
+  COUNT(1) AS tiles
 FROM wmf.webrequest
 WHERE
-    webrequest_source = 'upload'
-    AND year = ${year} AND month = ${month} AND day = ${day}
-    AND uri_host = 'maps.wikimedia.org'
-    AND http_status IN('200', '304')
-    AND uri_path RLIKE '^/([^/]+)/([0-9]{1,2})/(-?[0-9]+)/(-?[0-9]+)(@([0-9]\\.?[0-9]?)x)?\\.([a-z]+)$'
-    AND uri_query <> '?loadtesting'
-    AND REGEXP_EXTRACT(uri_path, '^/([^/]+)/([0-9]{1,2})/(-?[0-9]+)/(-?[0-9]+)(@([0-9]\\.?[0-9]?)x)?\\.([a-z]+)$', 1) != '' -- style
-    AND REGEXP_EXTRACT(uri_path, '^/([^/]+)/([0-9]{1,2})/(-?[0-9]+)/(-?[0-9]+)(@([0-9]\\.?[0-9]?)x)?\\.([a-z]+)$', 2) != '' -- zoom
+  webrequest_source = 'upload'
+  AND year = ${year} AND month = ${month} AND day = ${day}
+  AND uri_host = 'maps.wikimedia.org'
+  AND http_status IN('200', '304')
+  AND uri_path RLIKE '^/([^/]+)/([0-9]{1,2})/(-?[0-9]+)/(-?[0-9]+)(@([0-9]\\.?[0-9]?)x)?\\.([a-z]+)$'
+  AND uri_query <> '?loadtesting'
+  AND REGEXP_EXTRACT(uri_path, '^/([^/]+)/([0-9]{1,2})/(-?[0-9]+)/(-?[0-9]+)(@([0-9]\\.?[0-9]?)x)?\\.([a-z]+)$', 1) != '' -- style
+  AND REGEXP_EXTRACT(uri_path, '^/([^/]+)/([0-9]{1,2})/(-?[0-9]+)/(-?[0-9]+)(@([0-9]\\.?[0-9]?)x)?\\.([a-z]+)$', 2) != '' -- zoom
 GROUP BY
-    CASE WHEN parse_url(referer, 'HOST') = 'tools.wmflabs.org' THEN 'Wikimedia Labs'
-         WHEN parse_url(referer, 'HOST') = 'query.wikidata.org' THEN 'Wikidata Query Service'
-         WHEN parse_url(referer, 'HOST') RLIKE '(pkget)|(pkmtracker)|(pogomap)' THEN 'Pokemon Go fansite'
-         WHEN referer IS NULL THEN 'Wikimedia Maps'
-         WHEN referer_class = 'internal' & parse_url(referer, 'HOST') RLIKE 'wikipedia\\.org$' THEN 'Wikipedia'
-         WHEN referer_class = 'internal' & parse_url(referer, 'HOST') RLIKE 'wikivoyage\\.org$' THEN 'Wikivoyage'
-         WHEN referer_class = 'internal' THEN 'Other Wikimedia projects'
-         ELSE 'Other' END
+  CASE WHEN parse_url(referer, 'HOST') = 'tools.wmflabs.org' THEN 'Wikimedia Labs'
+       WHEN parse_url(referer, 'HOST') = 'query.wikidata.org' THEN 'Wikidata Query Service'
+       WHEN parse_url(referer, 'HOST') RLIKE '(pkget)|(pkmtracker)|(pogomap)' THEN 'Pokemon Go fansite'
+       WHEN referer IS NULL THEN 'Wikimedia Maps'
+       WHEN referer_class = 'internal' AND parse_url(referer, 'HOST') RLIKE 'wikipedia\\.org$' THEN 'Wikipedia'
+       WHEN referer_class = 'internal' AND parse_url(referer, 'HOST') RLIKE 'wikivoyage\\.org$' THEN 'Wikivoyage'
+       WHEN referer_class = 'internal' THEN 'Other Wikimedia projects'
+       ELSE 'Other' END
 ORDER BY tiles DESC
 LIMIT 100;"
 

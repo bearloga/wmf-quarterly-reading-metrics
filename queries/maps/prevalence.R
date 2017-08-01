@@ -53,7 +53,7 @@ FROM (
   ) AS filtered_props
   RIGHT JOIN page ON page.page_id = filtered_props.pp_page AND page.page_namespace = {ns}
 ) joined_tables;")
-  return()
+  return(query)
 }
 
 # Fetch data from MySQL database:
