@@ -4,11 +4,13 @@
 # Phabricator: T171531
 
 args = commandArgs(trailingOnly = TRUE)
-message("\nFetching tile counts by referrer, etc.\n")
 today <- args[1]
+message("\nFetching tile counts by referrer for the 60 days leading up to ", today, "\n")
+
 suppressPackageStartupMessages({
   library(glue)
 })
+
 tsv_path <- glue("data/maps/kartotherian-referrers_{today}.tsv")
 
 if (!dir.exists(dirname(tsv_path))) {

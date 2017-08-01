@@ -4,11 +4,14 @@
 # Phabricator: T171529
 
 args = commandArgs(trailingOnly = TRUE)
-message("\nFetching portal pageviews by platform\n")
 today <- args[1]
+
+message("\nFetching portal pageviews by platform for the 60 days leading up to ", today, "\n")
+
 suppressPackageStartupMessages({
   library(glue)
 })
+
 tsv_path <- glue("data/portal/pageviews-platform_{today}.tsv")
 
 if (!dir.exists(dirname(tsv_path))) {

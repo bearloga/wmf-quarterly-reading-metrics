@@ -4,18 +4,22 @@
 # Phabricator: T171531
 
 args = commandArgs(trailingOnly = TRUE)
-message("\nFetching mapframe & maplink prevalence stats\n")
 today <- args[1]
+
+message("\nFetching mapframe & maplink prevalence stats\n")
+
 suppressPackageStartupMessages({
   library(glue)
 })
+
 tsv_path <- glue("data/maps/prevalence_{today}.tsv")
 
 if (!dir.exists(dirname(tsv_path))) {
   dir.create(dirname(tsv_path), recursive = TRUE)
 }
 
-enabled <- yaml::yaml.load_file("prevalence.yaml")
+# working dir is root
+enabled <- yaml::yaml.load_file("queries/maps/prevalence.yaml")
 
 wikis <- function(type) {
   if (type == "mapframe") {

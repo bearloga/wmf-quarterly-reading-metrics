@@ -4,11 +4,14 @@
 # Phabricator: T171531
 
 args = commandArgs(trailingOnly = TRUE)
-message("\nFetching average tiles per user, etc.\n")
 today <- args[1]
+
+message("\nFetching average tiles per user for the 60 days leading up to ", today, "\n")
+
 suppressPackageStartupMessages({
   library(glue)
 })
+
 tsv_path <- glue("data/maps/kartotherian-users_{today}.tsv")
 
 if (!dir.exists(dirname(tsv_path))) {

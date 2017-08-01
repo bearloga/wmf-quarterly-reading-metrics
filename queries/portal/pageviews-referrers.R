@@ -4,9 +4,11 @@
 # Phabricator: T171529
 
 args = commandArgs(trailingOnly = TRUE)
-message("\nFetching portal pageviews referrer data\n")
 today <- args[1]
 ago <- format(as.Date(today) - 90, "%Y-%m-%d")
+
+message("\nFetching portal pageviews referrer data for the 90 days leading up to ", today, ", starting with ", ago, "\n")
+
 suppressPackageStartupMessages({
   library(magrittr)
   library(glue)
@@ -18,11 +20,15 @@ if (!dir.exists(dirname(tsv_path))) {
 }
 
 suppressWarnings(
-  pageviews <- polloi::read_dataset("discovery/metrics/portal/referer_data.tsv", col_types = "Dlcci")
+  pageviews <- readr::read_tsv(
+    "/srv/published-datasets/discovery/metrics/portal/referer_data.tsv",
+    col_types = "Dlcci"
+  )
+  # pageviews <- polloi::read_dataset("discovery/metrics/portal/referer_data.tsv", col_types = "Dlcci")
 )
 
 results <- pageviews %>%
-  dplyr::filter(referer_clas != "unknown", date >= ago) %>%
+  dplyr::filter(referer_class != "unknown", date >= ago) %>%
   dplyr::mutate(referer_class = forcats::fct_recode(
     referer_class,
     `Referred by something other than search engine` = "external",
