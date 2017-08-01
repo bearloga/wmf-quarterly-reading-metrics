@@ -85,7 +85,7 @@ results <- results %>%
     is_mobile = browser_family %in% c("Opera Mini") | grepl("^Symbian", os_family) |
       os_family %in% c("iOS", "Android", "Firefox OS", "BlackBerry OS", "Chrome OS", "Kindle", "Windows Phone") |
       grepl("(phone)|(mobile)|(tablet)|(lumia)", device_family, ignore.case = TRUE),
-    is_US = grepl("^U\\.S\\.", country_code),
+    is_US = grepl("^US:", country_code),
     country_code = dplyr::if_else(is_US, "US", country_code)
   ) %>%
   dplyr::left_join(regions[, c("region", "Alpha_2")], by = c("country_code" = "Alpha_2")) %>%
@@ -110,16 +110,30 @@ nth_non_na <- function(x, n) {
 }
 
 sessions <- results %>%
-  dplyr::group_by(date, region, grouping, is_mobile, session) %>%
+  dplyr::group_by(date, region, grouping, is_mobile, is_US, session) %>%
   dplyr::summarize(
     clickthrough = any(type == "clickthrough"),
     last_action = nth_non_na(section_used, Inf),
     first_action = nth_non_na(section_used, 1)
-  )
+  ) %>%
+  dplyr::ungroup()
 
 most_common <- function(x) {
   return(names(head(sort(table(x), decreasing = TRUE), 1)))
 }
+
+sessions %>%
+  dplyr::mutate(region = dplyr::if_else(is_US, "United States", "Everyone else")) %>%
+  dplyr::group_by(date, region) %>%
+  dplyr::summarize(
+    sessions = n(),
+    mobile = sum(is_mobile),
+    ctr = round(sum(clickthrough)/n(), 4),
+    bounce_rate = 1 - ctr,
+    first_action = most_common(first_action),
+    last_action = most_common(last_action)
+  ) %>%
+  readr::write_tsv(glue("data/portal/us-vs-world_{today}.tsv"))
 
 sessions %>%
   dplyr::filter(!is.na(region)) %>%
