@@ -13,6 +13,7 @@ suppressPackageStartupMessages({
   library(magrittr)
   library(glue)
 })
+
 tsv_path <- glue("data/portal/pageviews-referrer_{today}.tsv")
 
 if (!dir.exists(dirname(tsv_path))) {

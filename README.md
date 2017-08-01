@@ -16,7 +16,7 @@ Output:
 
 ```R
 install.packages(
-  c("devtools", "tidyverse", "glue"),
+  c("devtools", "tidyverse", "glue", "ISOcodes"),
   repos = c(CRAN = "https://cran.rstudio.com")
 )
 devtools::install_git("https://gerrit.wikimedia.org/r/wikimedia/discovery/wmf")
@@ -34,9 +34,6 @@ devtools::install_git("https://gerrit.wikimedia.org/r/wikimedia/discovery/polloi
 - [ ] tiles served
     - [x] data
     - [ ] figure
-- [ ] average tiles per user
-    - [x] data
-    - [ ] figure
 - [ ] pokemonGo users - how much of an impact are they still having on us as usage of the game declines
     - [x] data
     - [ ] figure
@@ -46,20 +43,14 @@ devtools::install_git("https://gerrit.wikimedia.org/r/wikimedia/discovery/polloi
 - [ ] Pageviews (percentages of mobile v desktop)
     - [x] data
     - [ ] figure
-- [ ] mobile app links (which gets most clicks also mobile vs desktop)
-    - [ ] data
-    - [ ] figure
 - [ ] Bounce rate (mobile vs desktop)
-    - [ ] data
+    - [x] data
     - [ ] figure
 - [ ] look to see if there are interesting geographics in usage or bounce rate
-    - [ ] data
+    - [x] data
     - [ ] figure
 - [ ] How traffic gets there (direct vs referred)
     - [x] data
-    - [ ] figure
-- [ ] What sister projects they go to
-    - [ ] data
     - [ ] figure
 
 ### Mobile vs Desktop
