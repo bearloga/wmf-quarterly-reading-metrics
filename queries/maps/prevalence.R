@@ -58,15 +58,15 @@ FROM (
 
 # Fetch data from MySQL database:
 results <- do.call(rbind, lapply(c("mapframe", "maplink"), function(type) {
-  # Wikis <- wikis(type) # production
-  Wikis <- c(frwiki = "frwiki", frwikivoyage = "frwikivoyage") # development
+  Wikis <- wikis(type) # production
+  # Wikis <- c(frwiki = "frwiki", frwikivoyage = "frwikivoyage") # development
   results <- dplyr::bind_rows(lapply(Wikis, function(wiki) {
     message("Fetching data for ", type, " on ", wiki)
     result <- tryCatch(
-      suppressMessages(wmf::mysql_read(
+      suppressWarnings(suppressMessages(wmf::mysql_read(
         prevalence_query(type, wiki),
         wiki
-      )),
+      ))),
       error = function(e) {
         return(data.frame())
       }

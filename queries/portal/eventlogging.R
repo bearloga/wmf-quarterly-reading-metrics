@@ -22,7 +22,6 @@ query <- "SELECT
   userAgent AS user_agent,
   event_session_id AS session,
   UPPER(event_country) AS country_code,
-  event_destination AS destination,
   event_event_type AS type,
   event_section_used AS section_used
 FROM WikipediaPortal_15890769
@@ -46,7 +45,7 @@ null2na <- function(x) {
 }
 
 results <- do.call(rbind, lapply(
-  seq(as.Date(today) - 1, as.Date(today) - 1, by = "day"),
+  seq(as.Date(today) - 91, as.Date(today) - 1, by = "day"),
   function(date) {
     message("Fetching data from ", format(date, "%Y-%m-%d"))
     condensed_date <- format(date, "%Y%m%d")
@@ -122,6 +121,11 @@ most_common <- function(x) {
   return(names(head(sort(table(x), decreasing = TRUE), 1)))
 }
 
+write_tsv <- function(x, name) {
+  readr::write_tsv(x, name)
+  message("\nData written to ", name, "\n")
+}
+
 sessions %>%
   dplyr::mutate(region = dplyr::if_else(is_US, "United States", "Everyone else")) %>%
   dplyr::group_by(date, region) %>%
@@ -129,11 +133,11 @@ sessions %>%
     sessions = n(),
     mobile = sum(is_mobile),
     ctr = round(sum(clickthrough)/n(), 4),
-    bounce_rate = 1 - ctr,
+    bounce_rate = round(1 - ctr, 4),
     first_action = most_common(first_action),
     last_action = most_common(last_action)
   ) %>%
-  readr::write_tsv(glue("data/portal/us-vs-world_{today}.tsv"))
+  write_tsv(glue("data/portal/us-vs-world_{today}.tsv"))
 
 sessions %>%
   dplyr::filter(!is.na(region)) %>%
@@ -142,11 +146,11 @@ sessions %>%
     sessions = n(),
     mobile = sum(is_mobile),
     ctr = round(sum(clickthrough)/n(), 4),
-    bounce_rate = 1 - ctr,
+    bounce_rate = round(1 - ctr, 4),
     first_action = most_common(first_action),
     last_action = most_common(last_action)
   ) %>%
-  readr::write_tsv(glue("data/portal/regions_{today}.tsv"))
+  write_tsv(glue("data/portal/regions_{today}.tsv"))
 
 sessions %>%
   dplyr::filter(!is.na(grouping)) %>%
@@ -155,11 +159,11 @@ sessions %>%
     sessions = n(),
     mobile = sum(is_mobile),
     ctr = round(sum(clickthrough)/n(), 4),
-    bounce_rate = 1 - ctr,
+    bounce_rate = round(1 - ctr, 4),
     first_action = most_common(first_action),
     last_action = most_common(last_action)
   ) %>%
-  readr::write_tsv(glue("data/portal/groupings_{today}.tsv"))
+  write_tsv(glue("data/portal/groupings_{today}.tsv"))
 
 sessions %>%
   dplyr::group_by(date) %>%
@@ -167,11 +171,11 @@ sessions %>%
     sessions = n(),
     mobile = sum(is_mobile),
     ctr = round(sum(clickthrough)/n(), 4),
-    bounce_rate = 1 - ctr,
+    bounce_rate = round(1 - ctr, 4),
     first_action = most_common(first_action),
     last_action = most_common(last_action)
   ) %>%
-  readr::write_tsv(glue("data/portal/overall_{today}.tsv"))
+  write_tsv(glue("data/portal/overall_{today}.tsv"))
 
 sessions %>%
   dplyr::mutate(device = dplyr::if_else(is_mobile, "mobile", "desktop")) %>%
@@ -179,8 +183,8 @@ sessions %>%
   dplyr::summarize(
     sessions = n(),
     ctr = round(sum(clickthrough)/n(), 4),
-    bounce_rate = 1 - ctr,
+    bounce_rate = round(1 - ctr, 4),
     first_action = most_common(first_action),
     last_action = most_common(last_action)
   ) %>%
-  readr::write_tsv(glue("data/portal/device_{today}.tsv"))
+  write_tsv(glue("data/portal/device_{today}.tsv"))

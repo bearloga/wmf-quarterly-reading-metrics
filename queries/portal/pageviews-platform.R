@@ -52,7 +52,7 @@ GROUP BY
   ), 'mobile', 'desktop');"
 
 results <- do.call(rbind, lapply(
-  seq(as.Date(today) - 1, as.Date(today) - 1, by = "day"),
+  seq(as.Date(today) - 61, as.Date(today) - 1, by = "day"),
   function(date) {
     message("Fetching data from ", format(date, "%Y-%m-%d"))
     year <- lubridate::year(date)
