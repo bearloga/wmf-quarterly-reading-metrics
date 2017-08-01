@@ -38,7 +38,7 @@ SELECT
   COUNT(1) AS unique_users,
   SUM(tiles) AS total_tiles,
   PERCENTILE(tiles, 0.5) AS median_tiles,
-  PERCENTILE(tiles, 0.99) AS `99th percentile`
+  PERCENTILE(tiles, 0.99) AS p99_tiles
 FROM per_user_counts;"
 
 results <- do.call(rbind, lapply(

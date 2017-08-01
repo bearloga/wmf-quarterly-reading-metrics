@@ -42,10 +42,7 @@ results <- pageviews %>%
   dplyr::filter(!is.na(referrer), !is.na(pageviews)) %>%
   dplyr::distinct(date, referrer, .keep_all = TRUE) %>%
   dplyr::group_by(date) %>%
-  dplyr::mutate(
-    total = sum(pageviews),
-    proportion = 100 * (pageviews/total)
-  )
+  dplyr::mutate(proportion = round(100 * (pageviews/sum(pageviews)), 3))
 
 readr::write_tsv(results, tsv_path)
 message("\nData written to ", tsv_path, "\n")
