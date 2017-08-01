@@ -54,7 +54,9 @@ FROM (
 
 # Fetch data from MySQL database:
 results <- do.call(rbind, lapply(c("mapframe", "maplink"), function(type) {
-  results <- dplyr::bind_rows(lapply(wikis(type), function(wiki) {
+  # Wikis <- wikis(type) # production
+  Wikis <- c("frwiki", "frwikivoyage") # development
+  results <- dplyr::bind_rows(lapply(Wikis, function(wiki) {
     message("Fetching data for ", type, " on ", wiki)
     result <- tryCatch(
       suppressMessages(wmf::mysql_read(
