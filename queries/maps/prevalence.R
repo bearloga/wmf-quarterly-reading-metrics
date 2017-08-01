@@ -59,7 +59,7 @@ FROM (
 # Fetch data from MySQL database:
 results <- do.call(rbind, lapply(c("mapframe", "maplink"), function(type) {
   # Wikis <- wikis(type) # production
-  Wikis <- c("frwiki", "frwikivoyage") # development
+  Wikis <- c(frwiki = "frwiki", frwikivoyage = "frwikivoyage") # development
   results <- dplyr::bind_rows(lapply(Wikis, function(wiki) {
     message("Fetching data for ", type, " on ", wiki)
     result <- tryCatch(
