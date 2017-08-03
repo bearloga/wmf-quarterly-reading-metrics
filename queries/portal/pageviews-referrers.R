@@ -5,9 +5,8 @@
 
 args = commandArgs(trailingOnly = TRUE)
 today <- args[1]
-ago <- format(as.Date(today) - 90, "%Y-%m-%d")
 
-message("\nFetching portal pageviews referrer data for the 90 days leading up to ", today, ", starting with ", ago, "\n")
+message("\nFetching portal pageviews referrer data leading up to ", today, "\n")
 
 suppressPackageStartupMessages({
   library(magrittr)
@@ -29,7 +28,7 @@ suppressWarnings(
 )
 
 results <- pageviews %>%
-  dplyr::filter(referer_class != "unknown", date >= ago) %>%
+  dplyr::filter(referer_class != "unknown", date > "2016-03-06") %>%
   dplyr::mutate(referer_class = forcats::fct_recode(
     referer_class,
     `Referred by something other than search engine` = "external",

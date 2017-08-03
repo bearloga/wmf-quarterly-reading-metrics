@@ -44,13 +44,14 @@ null2na <- function(x) {
   }))
 }
 
-results <- do.call(rbind, lapply(
+con <- RMySQL::dbConnect(RMySQL::MySQL(), host = "127.0.0.1", group = "client", dbname = "log", port = 3307)
+results <- dplyr::bind_rows(lapply(
   seq(as.Date(today) - 91, as.Date(today) - 1, by = "day"),
   function(date) {
     message("Fetching data from ", format(date, "%Y-%m-%d"))
     condensed_date <- format(date, "%Y%m%d")
     query <- glue(query, .open = "{", .close = "}")
-    result <- wmf::mysql_read(query, "log")
+    result <- wmf::mysql_read(query, "log", con)
     result$ts <- lubridate::ymd_hms(result$ts)
     user_agents <- purrr::map_df(result$user_agent, ~ null2na(jsonlite::fromJSON(.x, simplifyVector = FALSE)))
     return(cbind(date = date, result[, setdiff(names(result), "user_agent")], user_agents))
@@ -118,7 +119,21 @@ sessions <- results %>%
   dplyr::ungroup()
 
 most_common <- function(x) {
-  return(names(head(sort(table(x), decreasing = TRUE), 1)))
+  if (is.null(x) || all(is.na(x))) {
+    return(as.character(NA))
+  } else {
+    if (length(x) > 0) {
+      y <- names(head(sort(table(x), decreasing = TRUE), 1))
+      if (is.null(y)) {
+        warning("x: ", paste0(x, collapse = ", "))
+        return(as.character(NA))
+      } else {
+        return(y)
+      }
+    } else {
+      return(as.character(NA))
+    }
+  }
 }
 
 write_tsv <- function(x, name) {

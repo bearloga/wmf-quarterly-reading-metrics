@@ -25,33 +25,33 @@ devtools::install_git("https://gerrit.wikimedia.org/r/wikimedia/discovery/polloi
 
 ## Wikimedia Maps
 
-- [ ] total article, articles with some sort of map (-link or -frame) and maplink prevalence % vs total articles by top languages
+- [x] total article, articles with some sort of map (-link or -frame) and maplink prevalence % vs total articles by top languages
     - [x] data
-    - [ ] figure
+    - [x] table
 - [ ] pageviews overall vs pageviews of articles with a map (link or frame) by top languages (use highest prevalence languages)
     - [ ] data
     - [ ] figure
-- [ ] tiles served
+- [x] tiles served
     - [x] data
-    - [ ] figure
-- [ ] pokemonGo users - how much of an impact are they still having on us as usage of the game declines
+    - [x] figure
+- [x] pokemonGo users - how much of an impact are they still having on us as usage of the game declines
     - [x] data
-    - [ ] figure
+    - [x] figure
 
 ## Wikipedia.org Portal
 
-- [ ] Pageviews (percentages of mobile v desktop)
+- [x] Pageviews (percentages of mobile v desktop)
     - [x] data
-    - [ ] figure
-- [ ] Bounce rate (mobile vs desktop)
+    - [x] figure
+- [x] Bounce rate (mobile vs desktop)
     - [x] data
-    - [ ] figure
-- [ ] look to see if there are interesting geographics in usage or bounce rate
+    - [x] figure
+- [x] look to see if there are interesting geographics in usage or bounce rate
     - [x] data
-    - [ ] figure
-- [ ] How traffic gets there (direct vs referred)
+    - [x] figure
+- [x] How traffic gets there (direct vs referred)
     - [x] data
-    - [ ] figure
+    - [x] figure
 
 ### Mobile vs Desktop
 
