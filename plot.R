@@ -257,9 +257,9 @@ Data %>%
 ## Referrer Breakdown
 Data <- readr::read_tsv(glue("data/maps/kartotherian-referrers_{today}.tsv")) %>%
   dplyr::mutate(referrer = factor(referrer, levels = c(
-    "Wikivoyage", "Pokemon Go fansite", "Wikipedia",
-    "Wikimedia Labs", "Wikidata Query Service",
-    "Other Wikimedia projects", "Other"
+    "Pokemon Go fansite", "Wikipedia", "Wikimedia Labs", "Other",
+    "Wikidata Query Service", "Wikivoyage",
+    "Other Wikimedia projects"
   )))
 p <- ggplot(Data, aes(x = date, y = tiles, fill = referrer)) +
   geom_area(position = "stack") +
